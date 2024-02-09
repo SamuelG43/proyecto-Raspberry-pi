@@ -1,2 +1,2 @@
-# proyecto-Raspberry-pi.
+# proyecto-Raspberry-pi
 Creación de github 
