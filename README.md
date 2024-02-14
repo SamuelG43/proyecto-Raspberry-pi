@@ -1,6 +1,6 @@
-# Proyecto-Raspberry-pi Documentación
+   # Proyecto-Raspberry-pi 
 
-
+# Ejercicio 5 Documentación
 ## Descripción
 
 - El Raspberry Pi Pico es una placa de desarrollo económica creada por la Fundación Raspberry Pi, basada en el microcontrolador RP2040. 
@@ -55,3 +55,20 @@
 - Reloj preciso en el chip.
 - Sensor de temperatura.
 - Bibliotecas aceleradas de enteros y punto flotante en el chip.
+
+
+
+# Ejercicio 6 Caso de Estudio
+- ¿Cómo se ejecuta este programa?
+
+El código en la función setup() se ejecuta una vez al inicio del programa, y el código en la función loop() se ejecuta en un bucle después de que se complete setup(). En este caso, la función setup() llama a la función task1() una vez al inicio, y la función loop() también llama a la función task1() en un loop.
+
+- ¿Pudiste ver este mensaje: Serial.print("Task1States::WAIT_TIMEOUT\n");? ¿Por qué crees que ocurre esto?
+No, pero el mensaje "Task1States::WAIT_TIMEOUT" se debería imprimir en la consola serial cuando el programa entra en el estado Task1States::INIT. Esto ocurre porque hay una instrucción Serial.print dentro del bloque de código asociado con el caso Task1States::INIT. Cuando el programa comienza, entra en el estado INIT, imprime este mensaje y luego pasa al estado WAIT_TIMEOUT.
+
+- ¿Cuántas veces se ejecuta el código en el caso Task1States::INIT?
+El código en el caso Task1States::INIT se ejecuta una vez al inicio del programa, ya que está dentro del bloque de código asociado con el estado INIT y se establece la variable de estado task1State en Task1States::WAIT_TIMEOUT. Después de la primera ejecución, el programa no vuelve a entrar en el estado INIT porque la variable de estado cambia a Task1States::WAIT_TIMEOUT y ese es el único estado que se maneja en el bucle principal (loop()).
+
+
+
+
