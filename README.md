@@ -65,11 +65,11 @@
 
 - ¿Pudiste ver este mensaje: Serial.print("Task1States::WAIT_TIMEOUT\n");? ¿Por qué crees que ocurre esto?
   
-   No, pero el mensaje "Task1States::WAIT_TIMEOUT" se debería imprimir en la consola serial cuando el programa entra en el estado Task1States::INIT. Esto ocurre porque hay una instrucción Serial.print dentro del bloque de código asociado con el caso Task1States::INIT. Cuando el programa comienza, entra en el estado INIT, imprime este mensaje y luego pasa al estado WAIT_TIMEOUT.
-
+   No, debido a que la instrucción de imprimir el texto está después de la instrucción de cambiar el estado de la máquina, por lo que la máquina cambiaba de estado antes de poder imprimir el mensaje, pero agregando un delay y moviendo la instrucción arriba del cambio de estado permite al micro-crontrolador procesar e imprimir el mensaje correctamente.
+  
 - ¿Cuántas veces se ejecuta el código en el caso Task1States::INIT?
 
-   El código en el caso Task1States::INIT se ejecuta una vez al inicio del programa, ya que está dentro del bloque de código asociado con el estado INIT y se establece la variable de estado task1State en Task1States::WAIT_TIMEOUT. Después de la primera ejecución, el programa no vuelve a entrar en el estado INIT porque la variable de estado cambia a Task1States::WAIT_TIMEOUT y ese es el único estado que se maneja en el bucle principal (loop()).
+Solo una vez, cuando se inicia el programa, posteriormente se cambia al estado de WAIT_TIMEOUT y este se queda en un loop.
 
 
 
