@@ -72,5 +72,5 @@
 Solo una vez, cuando se inicia el programa, posteriormente se cambia al estado de WAIT_TIMEOUT y este se queda en un loop.
 
 
-
-
+# Ejercicio 7 Análisis del Programa de Prueba
+- La funcion millis(); ayuda a  devolver el nuemero de milisegundos desde que el programa comienza a ejecutarse ,esto es  útil para medir el tiempo entre eventos, implementar temporizadores o cronómetros en programas para  Arduino.
