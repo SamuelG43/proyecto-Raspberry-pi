@@ -76,6 +76,8 @@ Solo una vez, cuando se inicia el programa, posteriormente se cambia al estado d
 - La funcion millis(); ayuda a  devolver el nuemero de milisegundos desde que el programa comienza a ejecutarse, esto es  útil para medir el tiempo entre eventos, implementar temporizadores o cronómetros en programas para  Arduino.
 
 # Ejercicio 8 Retrieval practice (evaluación formativa)
+
+- Realiza un programa que envíe un mensaje al pasar un segundo, dos segundos y tres segundos. Luego de esto debe volver a comenzar.
 ```
 void task1()
 {
