@@ -73,4 +73,136 @@ Solo una vez, cuando se inicia el programa, posteriormente se cambia al estado d
 
 
 # Ejercicio 7 Análisis del Programa de Prueba
-- La funcion millis(); ayuda a  devolver el nuemero de milisegundos desde que el programa comienza a ejecutarse ,esto es  útil para medir el tiempo entre eventos, implementar temporizadores o cronómetros en programas para  Arduino.
+- La funcion millis(); ayuda a  devolver el nuemero de milisegundos desde que el programa comienza a ejecutarse, esto es  útil para medir el tiempo entre eventos, implementar temporizadores o cronómetros en programas para  Arduino.
+
+# Ejercicio 8 Retrieval practice (evaluación formativa)
+```
+void task1()
+{
+    // Definición de estados y variable de estado
+    enum class Task1States
+    {
+        INIT,
+        WAIT_TIMEOUT1,
+        WAIT_TIMEOUT2,
+        WAIT_TIMEOUT3
+    };
+    static Task1States task1State = Task1States::INIT;
+
+    // Definición de variables static (conservan su valor entre llamadas a task1)
+    static uint32_t lastTime = 0;
+
+    // Constantes
+    constexpr uint32_t INTERVAL1 = 1000;
+    constexpr uint32_t INTERVAL2 = 2000;
+    constexpr uint32_t INTERVAL3 = 3000;
+
+    // MÁQUINA de ESTADOS
+    switch (task1State)
+    {
+    case Task1States::INIT:
+    {
+        // Acciones:
+        Serial.begin(115200);
+
+        // Garantiza los valores iniciales para el siguiente estado.
+        lastTime = millis();
+        task1State = Task1States::WAIT_TIMEOUT1;
+
+        break;
+    }
+    case Task1States::WAIT_TIMEOUT1:
+    {
+        uint32_t currentTime = millis();
+
+        // Evento
+        if ((currentTime - lastTime) >= INTERVAL1)
+        {
+            // Acciones:
+            lastTime = currentTime;
+            Serial.print(currentTime);
+            Serial.print("hola este es el primer mensaje");
+            Serial.print('\n');
+            task1State = Task1States::WAIT_TIMEOUT2;
+        }
+        break;
+    }
+
+
+    case Task1States::WAIT_TIMEOUT2:
+    {
+
+      uint32_t currentTime = millis();
+  
+          // Evento
+          if ((currentTime - lastTime) >= INTERVAL2)
+          {
+              // Acciones:
+              lastTime = currentTime;
+              Serial.print(currentTime);
+              Serial.print("hola este es el segundo mensaje");
+              Serial.print('\n');
+              task1State = Task1States::WAIT_TIMEOUT3;
+          }
+          break;
+    }
+      
+
+
+
+    case Task1States::WAIT_TIMEOUT3:
+    {
+
+      uint32_t currentTime = millis();
+  
+          // Evento
+          if ((currentTime - lastTime) >= INTERVAL3)
+          {
+              // Acciones:
+              lastTime = currentTime;
+              Serial.print(currentTime);
+              Serial.print("hola este es el 3 mensaje");
+              Serial.print('\n');
+              task1State = Task1States::WAIT_TIMEOUT1;
+              
+              
+          }
+          break;
+      
+    }
+    
+    
+    default:
+    {
+        Serial.println("Error");
+    }
+    }
+}
+
+void setup()
+{
+    task1();
+}
+
+void loop()
+{
+    task1();
+}
+```
+
+- Estados del Programa:
+   INIT: Estado inicial donde se realiza la inicialización y configuración inicial del programa.
+   WAIT_TIMEOUT1: Espera un intervalo de tiempo (INTERVAL1) antes de pasar al siguiente estado.
+   WAIT_TIMEOUT2: Espera un intervalo de tiempo (INTERVAL2) antes de pasar al siguiente estado.
+   WAIT_TIMEOUT3: Espera un intervalo de tiempo (INTERVAL3) antes de volver al estado inicial.
+  
+- Eventos:
+   WAIT_TIMEOUT1 a WAIT_TIMEOUT2: Ocurre cuando ha transcurrido el tiempo definido por INTERVAL1.
+   WAIT_TIMEOUT2 a WAIT_TIMEOUT3: Ocurre cuando ha transcurrido el tiempo definido por INTERVAL2.
+   WAIT_TIMEOUT3 a WAIT_TIMEOUT1: Ocurre cuando ha transcurrido el tiempo definido por INTERVAL3.
+  
+- Acciones:
+   INIT: Inicialización del estado y configuración inicial, incluyendo la inicialización de la comunicación serial y la configuración de la variable lastTime.
+   WAIT_TIMEOUT1: Muestra un mensaje en la comunicación serial después de que ha transcurrido el tiempo definido por INTERVAL1.
+   WAIT_TIMEOUT2: Muestra otro mensaje en la comunicación serial después de que ha transcurrido el tiempo definido por INTERVAL2.
+   WAIT_TIMEOUT3: Muestra un tercer mensaje en la comunicación serial después de que ha transcurrido el tiempo definido por INTERVAL3.
