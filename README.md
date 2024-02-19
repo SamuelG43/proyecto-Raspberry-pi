@@ -208,3 +208,83 @@ void loop()
       WAIT_TIMEOUT1: Muestra un mensaje en la comunicación serial después de que ha transcurrido el tiempo definido por INTERVAL1.
       WAIT_TIMEOUT2: Muestra otro mensaje en la comunicación serial después de que ha transcurrido el tiempo definido por INTERVAL2.
       WAIT_TIMEOUT3: Muestra un tercer mensaje en la comunicación serial después de que ha transcurrido el tiempo definido por INTERVAL3.
+
+
+# Ejericio 9 tareas concurrentes (evaluación formativa)
+```
+void task2(){
+    enum class Task2States{
+        INIT,
+        WAIT_FOR_TIMEOUT
+    };
+
+    static Task2States task2State = Task2States::INIT;
+    static uint32_t lastTime;
+    static constexpr uint32_t INTERVAL = 2000;  // 0.5 Hz
+
+    switch(task2State){
+        case Task2States::INIT:{
+            lastTime = millis();
+            task2State = Task2States::WAIT_FOR_TIMEOUT;
+            break;
+        }
+
+        case Task2States::WAIT_FOR_TIMEOUT:{
+            uint32_t currentTime = millis();
+            if( (currentTime - lastTime) >= INTERVAL ){
+                lastTime = currentTime;
+                Serial.print("mensaje a 0.5Hz\n");
+            }
+            break;
+        }
+
+        default:{
+            break;
+        }
+    }
+}
+
+void task3(){
+    enum class Task3States{
+        INIT,
+        WAIT_FOR_TIMEOUT
+    };
+
+    static Task3States task3State = Task3States::INIT;
+    static uint32_t lastTime;
+    static constexpr uint32_t INTERVAL = 4000;  // 0.25 Hz
+
+    switch(task3State){
+        case Task3States::INIT:{
+            lastTime = millis();
+            task3State = Task3States::WAIT_FOR_TIMEOUT;
+            break;
+        }
+
+        case Task3States::WAIT_FOR_TIMEOUT:{
+            uint32_t currentTime = millis();
+            if( (currentTime - lastTime) >= INTERVAL ){
+                lastTime = currentTime;
+                Serial.print("mensaje a 0.25Hz\n");
+            }
+            break;
+        }
+
+        default:{
+            break;
+        }
+    }
+}
+
+void setup()
+{
+    Serial.begin(115200);
+}
+
+void loop()
+{
+    task1();
+    task2();
+    task3();
+}
+```
