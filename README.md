@@ -193,18 +193,18 @@ void loop()
 ```
 
 - Estados del Programa:
-   INIT: Estado inicial donde se realiza la inicialización y configuración inicial del programa.
-   WAIT_TIMEOUT1: Espera un intervalo de tiempo (INTERVAL1) antes de pasar al siguiente estado.
-   WAIT_TIMEOUT2: Espera un intervalo de tiempo (INTERVAL2) antes de pasar al siguiente estado.
-   WAIT_TIMEOUT3: Espera un intervalo de tiempo (INTERVAL3) antes de volver al estado inicial.
+      INIT: Estado inicial donde se realiza la inicialización y configuración inicial del programa.
+      WAIT_TIMEOUT1: Espera un intervalo de tiempo (INTERVAL1) antes de pasar al siguiente estado.
+      WAIT_TIMEOUT2: Espera un intervalo de tiempo (INTERVAL2) antes de pasar al siguiente estado.
+      WAIT_TIMEOUT3: Espera un intervalo de tiempo (INTERVAL3) antes de volver al estado inicial.
   
 - Eventos:
-   WAIT_TIMEOUT1 a WAIT_TIMEOUT2: Ocurre cuando ha transcurrido el tiempo definido por INTERVAL1.
-   WAIT_TIMEOUT2 a WAIT_TIMEOUT3: Ocurre cuando ha transcurrido el tiempo definido por INTERVAL2.
-   WAIT_TIMEOUT3 a WAIT_TIMEOUT1: Ocurre cuando ha transcurrido el tiempo definido por INTERVAL3.
+      WAIT_TIMEOUT1 a WAIT_TIMEOUT2: Ocurre cuando ha transcurrido el tiempo definido por INTERVAL1.
+      WAIT_TIMEOUT2 a WAIT_TIMEOUT3: Ocurre cuando ha transcurrido el tiempo definido por INTERVAL2.
+      WAIT_TIMEOUT3 a WAIT_TIMEOUT1: Ocurre cuando ha transcurrido el tiempo definido por INTERVAL3.
   
 - Acciones:
-   INIT: Inicialización del estado y configuración inicial, incluyendo la inicialización de la comunicación serial y la configuración de la variable lastTime.
-   WAIT_TIMEOUT1: Muestra un mensaje en la comunicación serial después de que ha transcurrido el tiempo definido por INTERVAL1.
-   WAIT_TIMEOUT2: Muestra otro mensaje en la comunicación serial después de que ha transcurrido el tiempo definido por INTERVAL2.
-   WAIT_TIMEOUT3: Muestra un tercer mensaje en la comunicación serial después de que ha transcurrido el tiempo definido por INTERVAL3.
+      INIT: Inicialización del estado y configuración inicial, incluyendo la inicialización de la comunicación serial y la configuración de la variable lastTime.
+      WAIT_TIMEOUT1: Muestra un mensaje en la comunicación serial después de que ha transcurrido el tiempo definido por INTERVAL1.
+      WAIT_TIMEOUT2: Muestra otro mensaje en la comunicación serial después de que ha transcurrido el tiempo definido por INTERVAL2.
+      WAIT_TIMEOUT3: Muestra un tercer mensaje en la comunicación serial después de que ha transcurrido el tiempo definido por INTERVAL3.
