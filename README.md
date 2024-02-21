@@ -212,6 +212,40 @@ void loop()
 
 # Ejericio 9 tareas concurrentes (evaluación formativa)
 ```
+void task1(){
+    enum class Task1States{
+        INIT,
+        WAIT_FOR_TIMEOUT
+    };
+
+    static Task1States task1State = Task1States::INIT;
+    static uint32_t lastTime;
+    static constexpr uint32_t INTERVAL = 1000;
+
+    switch(task1State){
+        case Task1States::INIT:{
+            Serial.begin(115200);
+            lastTime = millis();
+            task1State = Task1States::WAIT_FOR_TIMEOUT;
+            break;
+        }
+
+        case Task1States::WAIT_FOR_TIMEOUT:{
+            // evento 1:            
+            uint32_t currentTime = millis();
+            if( (currentTime - lastTime) >= INTERVAL ){
+                lastTime = currentTime;
+                Serial.print("mensaje a 1Hz\n");
+            }
+            break;
+        }
+
+        default:{
+            break;
+        }
+    }
+
+}
 void task2(){
     enum class Task2States{
         INIT,
@@ -220,16 +254,18 @@ void task2(){
 
     static Task2States task2State = Task2States::INIT;
     static uint32_t lastTime;
-    static constexpr uint32_t INTERVAL = 2000;  // 0.5 Hz
+    static constexpr uint32_t INTERVAL = 2000;  // Cambiado a 2000 para obtener 0.5 Hz
 
     switch(task2State){
         case Task2States::INIT:{
+            Serial.begin(115200);
             lastTime = millis();
             task2State = Task2States::WAIT_FOR_TIMEOUT;
             break;
         }
 
         case Task2States::WAIT_FOR_TIMEOUT:{
+            // evento 2:
             uint32_t currentTime = millis();
             if( (currentTime - lastTime) >= INTERVAL ){
                 lastTime = currentTime;
@@ -252,16 +288,18 @@ void task3(){
 
     static Task3States task3State = Task3States::INIT;
     static uint32_t lastTime;
-    static constexpr uint32_t INTERVAL = 4000;  // 0.25 Hz
+    static constexpr uint32_t INTERVAL = 4000;  // Cambiado a 4000 para obtener 0.25 Hz
 
     switch(task3State){
         case Task3States::INIT:{
+            Serial.begin(115200);
             lastTime = millis();
             task3State = Task3States::WAIT_FOR_TIMEOUT;
             break;
         }
 
         case Task3States::WAIT_FOR_TIMEOUT:{
+            // evento 3:
             uint32_t currentTime = millis();
             if( (currentTime - lastTime) >= INTERVAL ){
                 lastTime = currentTime;
@@ -278,7 +316,9 @@ void task3(){
 
 void setup()
 {
-    Serial.begin(115200);
+    task1();
+    task2();
+    task3();
 }
 
 void loop()
@@ -288,3 +328,14 @@ void loop()
     task3();
 }
 ```
+
+# Ejercicio 11: realiza algunas pruebas
+- 1. Analiza el programa. ¿Por qué enviaste la letra con el botón send? ¿Qué evento verifica si ha llegado algo por el puerto serial?
+      R// if(Serial.avaliable() > 0)
+
+- 2. Analiza los números que se ven debajo de las letras. Nota que luego de la r, abajo, hay un número. ¿Qué es ese número?
+      R// Este indica que no hay más palabras y que ahí se termina el mensaje que se quería transmitir en pantalla.
+- 3. ¿Qué relación encuentras entre las letras y los números?
+     R// Cada letra corresponde a la posición numérica de ese mismo número, es decir "6f", la "f" es la posición sexta del abecedario
+- 4. ¿Qué es el 0a al final del mensaje y para qué crees que sirva?
+     R// El "0a" al final del mensaje es un valor hexadecimal que representa el número 10, 0a (10) indica que después de la palabra "computador", debería comenzar una nueva línea en el mensaje.
