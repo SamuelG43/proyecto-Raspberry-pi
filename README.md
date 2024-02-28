@@ -361,3 +361,127 @@ Serial.print(*pvar);
 - ¿Cómo se puede escribir el contenido de una variable por medio de un puntero?
 
 *pvar = 10;
+
+
+# Ejercicio 14: retrieval practice (evaluación formativa)
+```
+static void changeVar(uint32_t *pdata, uint32_t *pdata2)
+{
+    uint32_t temp = *pdata;
+    *pdata = *pdata2;
+    *pdata2 = temp;
+}
+
+static void printVar(uint32_t value)
+{
+    Serial.print("var content: ");
+    Serial.print(value);
+    Serial.print('\n');
+}
+
+void task1()
+{
+    enum class Task1States    {
+        INIT,
+        WAIT_DATA
+    };
+    static Task1States task1State = Task1States::INIT;
+
+    switch (task1State)
+    {
+    case Task1States::INIT:
+    {
+        Serial.begin(115200);
+        task1State = Task1States::WAIT_DATA;
+        break;
+    }
+
+    case Task1States::WAIT_DATA:
+    {
+        // evento 1:        // Ha llegado al menos un dato por el puerto serial?        
+     if (Serial.available() > 0)
+        {
+            Serial.read();
+            uint32_t var = 0;
+            uint32_t var2 = 1;
+            uint32_t *pvar = &var;
+            uint32_t *pvar2 = &var2;
+            
+            printVar(*pvar);
+            printVar(*pvar2);
+            changeVar(pvar, pvar2);
+            printVar(var);
+            printVar(var2);
+        }
+        break;
+    }
+
+    default:
+    {
+        break;
+    }
+    }
+}
+
+void setup()
+{
+    task1();
+}
+
+void loop()
+{
+    task1();
+}
+```
+
+# Ejercicio 15: Punteros y arreglos
+
+- ¿Por qué es necesario declarar rxData static? y si no es static ¿Qué pasa? ESTO ES IMPORTANTE, MUCHO.
+
+Con static:
+
+Al ser estático, rxData mantiene su valor entre llamadas a la función task1(). Esto significa que los datos almacenados en rxData no se reinician a cero cada vez que se llama a la función task1(). Si, por ejemplo, la función es llamada repetidamente en el bucle principal (loop()), rxData retiene su estado entre llamadas, lo que es crucial para acumular los datos recibidos hasta que se complete un conjunto de 5 bytes. Sin static:
+
+Si rxData no se declara como static, se comportará como una variable local dentro de la función task1(). Esto significa que cada vez que se llama a la función, se crea una nueva instancia de rxData y su contenido se reinicia. Si, por ejemplo, estás esperando recibir 5 bytes y acumularlos en rxData, sin el calificador static, cada vez que se llame a la función task1(), rxData se reiniciará, y no se acumularán los datos como se espera.
+
+dataCounter se define static y se inicializa en 0. Cada vez que se ingrese a la función loop dataCounter se inicializa a 0? ¿Por qué es necesario declararlo static?
+
+el funcionamiento es similar a rxData, cada vez que ingresa a el loop no se inizializa en 0, dataCounter conserva su valor entre llamadas de funiones debido a que se declara static, esto sirve para poder llevar seguimiento de la cantidad de datos ingresados
+
+Finalmente, la constante 0x30 en (pData[i] - 0x30) ¿Por qué es necesaria?
+
+La expresión pData[i] - 0x30 se utiliza para convertir un carácter numérico ASCII en su equivalente numérico. En el conjunto de caracteres ASCII, los dígitos numéricos del 0 al 9 tienen códigos ASCII consecutivos desde 0x30 hasta 0x39. Al restar 0x30, se realiza una conversión para obtener el valor numérico correspondiente.
+
+Por ejemplo:
+
+El carácter '0' tiene un código ASCII de 0x30. Restar 0x30 resultará en 0. El carácter '1' tiene un código ASCII de 0x31. Restar 0x30 resultará en 1. El carácter '2' tiene un código ASCII de 0x32. Restar 0x30 resultará en 2. Y así sucesivamente.
+
+# Ejercicio 16: análisis del api serial (investigación: hipótesis-pruebas)
+
+- ¿Qué pasa cuando hago un Serial.available()?
+
+Verifico si la placa recibio algun dato
+
+- ¿Qué pasa cuando hago un Serial.read()?
+
+Leo el dato que recibio la placa
+
+- ¿Qué pasa cuando hago un Serial.read() y no hay nada en el buffer de recepción?
+
+Cuando ejecutas Serial.read() y no hay nada en el buffer de recepción (Serial.available() devuelve 0), la función Serial.read() devuelve -1. Esta es una indicación de que no se ha recibido ningún dato.
+
+- Un patrón común al trabajar con el puerto serial es este:
+
+*if*(Serial.available() > 0){ int dataRx = Serial.read() }
+
+- ¿Cuántos datos lee Serial.read()?
+
+La función Serial.read() en Arduino lee un solo byte de datos del buffer de recepción serie. En términos de tipo de datos, devuelve un valor de tipo int, que representa el byte leído como un valor entre 0 y 255.
+
+- ¿Y si quiero leer más de un dato? No olvides que no se pueden leer más datos de los disponibles en el buffer de recepción porque no hay más datos que los que tenga allí.
+
+Se podria utilizar un arreglo como en el codigo del punto 15
+
+- ¿Qué pasa si te envían datos por serial y se te olvida llamar Serial.read()?
+
+Si se te olvida llamar a Serial.read() después de verificar que hay datos disponibles (Serial.available() > 0) en la función task1(), los datos que se envían por el puerto serie no se leerán y se acumularán en el búfer de recepción serial, si la comunicación serial está configurada para esperar la recepción de ciertos datos antes de continuar con la ejecución del programa, el código puede quedar bloqueado indefinidamente en el estado WAIT_DATA, ya que nunca se lee y procesa correctamente la información. Ademas, Si el código asume que siempre habrá datos disponibles y no se implementa una lógica adecuada para manejar la falta de datos, el programa puede comportarse de manera impredecible o generar errores.
