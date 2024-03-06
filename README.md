@@ -490,7 +490,7 @@ Si se te olvida llamar a Serial.read() después de verificar que hay datos dispo
 # TrabajoFinalUnidad1
 
 ## Diagrama de estados
-![git ](DiagramaDeEstadosFinal.jpeg)
+![git ](DiagramaDeEstadosFinal.jpg)
 ## Código
 ```
 enum class Task1States {
